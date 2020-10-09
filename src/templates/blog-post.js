@@ -5,6 +5,9 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+
 const BlogPostTemplate = ({ data, pageContext, location }) => {
   const post = data.markdownRemark
   const siteTitle = data.site.siteMetadata?.title || `Title`
@@ -25,6 +28,16 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
           <h1 itemProp="headline">{post.frontmatter.title}</h1>
           <p>{post.frontmatter.date}</p>
         </header>
+
+        {post.frontmatter.audio &&
+        <AudioPlayer
+          autoPlay
+          src={post.frontmatter.audio.publicURL}
+          onPlay={e => console.log("onPlay")}
+          // other props here
+        />
+        }
+
         <section
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
@@ -81,6 +94,9 @@ export const pageQuery = graphql`
         title
         date(formatString: "MMMM DD, YYYY")
         description
+        audio {
+          publicURL
+        }
       }
     }
   }
